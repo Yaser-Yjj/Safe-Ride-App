@@ -51,5 +51,9 @@
 		<string>We need access to your location to use background location services.</string>
 		<key>NSLocationAlwaysUsageDescription</key>
 		<string>We need access to your location to use background location services.</string>
+		<key>NSBluetoothAlwaysUsageDescription</key>
+		<string>Allow Bluetooth connection</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>Need location when connecting to BLE device</string>
 	</dict>
 </plist>

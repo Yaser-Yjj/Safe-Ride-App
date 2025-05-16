@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safe_ride_app/presentation/widgets/main/custom_floating_button.dart';
 import 'package:safe_ride_app/presentation/widgets/main/custom_bottom_navigation_bar.dart';
 import 'package:safe_ride_app/presentation/widgets/main/show_bubble_popup.dart';
+import 'package:safe_ride_app/core/utils/bluetooth_check_page.dart';
 import 'presentation/pages/home/home_page.dart';
 import 'presentation/pages/maps/maps_page.dart';
 import 'presentation/pages/history/history_page.dart';
@@ -18,9 +19,20 @@ class SafeRideApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainScreen(),
+      home: const MainScreen(),
+      routes: {
+        '/connected': (context) => const HomePage(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/bluetooth-check') {
+          return MaterialPageRoute(
+            builder: (_) => const BluetoothCheckPage(),
+          );
+        }
+        return null;
+      },
     );
   }
 }
@@ -42,6 +54,10 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _navigateToBluetoothCheck(BuildContext context) {
+    Navigator.pushNamed(context, '/bluetooth-check');
   }
 
   @override
@@ -91,7 +107,7 @@ class _MainScreenState extends State<MainScreen> {
                 },
               );
             },
-          )
+          ),
         ],
       ),
       body: PageView(
@@ -99,16 +115,11 @@ class _MainScreenState extends State<MainScreen> {
         onPageChanged: (index) {
           setState(() => _selectedIndex = index);
         },
-        children: const [
-          HomePage(),
-          MapsPage(),
-          HistoryPage(),
-          SettingsPage(),
-        ],
+        children: const [HomePage(), MapsPage(), HistoryPage(), SettingsPage()],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: CustomFloatingButton(
-        onPressed: () => _onPageSelected(0),
+        onPressed: () => _navigateToBluetoothCheck(context), // ← Trigger check
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
