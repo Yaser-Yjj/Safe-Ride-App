@@ -15,9 +15,7 @@ void showLoader(BuildContext context, String text) {
             child: Container(
               width: double.maxFinite,
               height: double.maxFinite,
-              color: c.darkColor.withAlpha(
-                (0.5 * 255).round(),
-              ),
+              color: c.darkColor.withAlpha((0.5 * 255).round()),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -38,4 +36,8 @@ void showLoader(BuildContext context, String text) {
           ),
         ),
   );
+}
+
+void hideLoader(BuildContext context) {
+  Navigator.of(context, rootNavigator: true).pop();
 }

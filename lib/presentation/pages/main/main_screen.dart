@@ -38,7 +38,13 @@ class _MainScreenState extends State<MainScreen> {
           showBubblePopup(context, iconKey);
         },
       ),
-      body: IndexedStack(index: _selectedIndex, children: _pages),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() => _selectedIndex = index);
+        },
+        children: const [HomePage(), MapsPage(), HistoryPage(), SettingsPage()],
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: CustomFloatingButton(
         onPressed: () => _onPageSelected(0),
@@ -48,27 +54,5 @@ class _MainScreenState extends State<MainScreen> {
         onPageSelected: _onPageSelected,
       ),
     );
-  }
-
-  List<Widget> get _pages => List.generate(4, (index) {
-    if (index == _selectedIndex) {
-      return _buildPage(index);
-    }
-    return const SizedBox();
-  });
-
-  Widget _buildPage(int index) {
-    switch (index) {
-      case 0:
-        return const HomePage();
-      case 1:
-        return const MapsPage();
-      case 2:
-        return const HistoryPage();
-      case 3:
-        return const SettingsPage();
-      default:
-        return const SizedBox();
-    }
   }
 }

@@ -34,7 +34,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
     String name = _nameController.text.trim();
     String number = _numberController.text.trim();
 
-    if (name.isEmpty || number.isEmpty) return;
+    //if (name.isEmpty || number.isEmpty) return;
 
     ConfigService().updateConfig((config) {
       switch (widget.contactIndex) {
