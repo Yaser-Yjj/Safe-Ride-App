@@ -27,7 +27,7 @@ Future<String?> showConnectionDialog(BuildContext context) async {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.pop(context, 'wifi'); // 👈 send wifi
+            Navigator.pop(context, 'wifi');
           },
           child: Text(
             "Wi-Fi",
@@ -41,7 +41,7 @@ Future<String?> showConnectionDialog(BuildContext context) async {
         ),
         TextButton(
           onPressed: () {
-            Navigator.pop(context, 'bluetooth'); // 👈 send bluetooth
+            Navigator.pop(context, 'bluetooth');
           },
           child: Text(
             "Bluetooth",

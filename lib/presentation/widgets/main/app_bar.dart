@@ -15,46 +15,48 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: "Safe",
-              style: TextStyle(
-                color: c.darkColor,
-                fontSize: 18,
-                fontFamily: 'DM Sans',
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            TextSpan(
-              text: "Ride",
-              style: TextStyle(
-                color: c.primaryColor,
-                fontSize: 18,
-                fontFamily: 'DM Sans',
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-        textAlign: TextAlign.center,
-      ),
       backgroundColor: const Color(0x00000000),
       elevation: 0,
+
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: "Safe",
+                  style: TextStyle(
+                    color: c.darkColor,
+                    fontSize: 18,
+                    fontFamily: 'DM Sans',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                TextSpan(
+                  text: "Ride",
+                  style: TextStyle(
+                    color: c.primaryColor,
+                    fontSize: 18,
+                    fontFamily: 'DM Sans',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+
       actions: svgIconPath != null
           ? [
-              Builder(
-                builder: (context) {
-                  return IconButton(
-                    icon: SvgPicture.asset(
-                      svgIconPath!,
-                      width: 24,
-                      height: 24,
-                    ),
-                    onPressed: onIconPressed ?? () {},
-                  );
-                },
+              IconButton(
+                icon: SvgPicture.asset(
+                  svgIconPath!,
+                  width: 24,
+                  height: 24,
+                ),
+                onPressed: onIconPressed ?? () {},
               ),
             ]
           : [],

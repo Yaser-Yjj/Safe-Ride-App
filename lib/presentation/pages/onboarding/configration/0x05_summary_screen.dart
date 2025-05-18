@@ -23,12 +23,12 @@ class _SummaryScreenState extends State<SummaryScreen> {
   @override
   void initState() {
     super.initState();
-    espService = ESP32Service(); // ✅ Use singleton
+    espService = ESP32Service(); 
   }
 
   @override
   void dispose() {
-    _subscription?.cancel(); // ✅ Safely cancel
+    _subscription?.cancel();
     super.dispose();
   }
 
@@ -59,7 +59,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
     });
 
     try {
-      // ✅ Cancel previous subscription
       await _subscription?.cancel();
 
       _subscription = espService.messages.listen(
