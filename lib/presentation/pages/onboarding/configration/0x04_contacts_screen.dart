@@ -54,12 +54,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
     });
 
     if (widget.contactIndex < 3) {
-      Navigator.pushNamed(context, AppRoutes.contacts, arguments: widget.contactIndex + 1);
-    } else {
       Navigator.pushNamed(
         context,
-        AppRoutes.summary,
+        AppRoutes.contacts,
+        arguments: widget.contactIndex + 1,
       );
+    } else {
+      Navigator.pushNamed(context, AppRoutes.summary);
     }
   }
 

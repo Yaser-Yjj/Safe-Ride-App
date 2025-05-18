@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safe_ride_app/core/theme/theme.dart';
 import 'package:safe_ride_app/presentation/routes/app_router.dart';
 import 'package:safe_ride_app/presentation/routes/app_routes.dart';
 
@@ -16,6 +17,13 @@ class SafeRideApp extends StatelessWidget {
       title: "Safe Ride",
       initialRoute: AppRoutes.connectDevice,
       onGenerateRoute: AppRouter.generateRoute,
+      theme: ThemeData(
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: c.darkColor,
+          selectionColor: c.grisColor,
+          selectionHandleColor: c.darkColor,
+        ),
+      ),
     );
   }
 }

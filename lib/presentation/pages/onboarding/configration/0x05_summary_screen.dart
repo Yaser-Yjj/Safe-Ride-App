@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:safe_ride_app/core/theme/theme.dart';
 import 'package:safe_ride_app/data/bluetooth/ESP32Service.dart';
 import 'package:safe_ride_app/data/bluetooth/config_service.dart';
 import 'package:safe_ride_app/presentation/routes/app_routes.dart';
@@ -23,7 +24,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
   @override
   void initState() {
     super.initState();
-    espService = ESP32Service(); 
+    espService = ESP32Service();
   }
 
   @override
@@ -50,7 +51,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
     String jsonString = jsonEncode(jsonData);
 
     if (!espService.connected || espService.socket == null) {
-      showCustomSnackBar(context, "Not connected to ESP32");
+      showCustomSnackBar(context, "Not connected to ESP32", c.errorColor);
       return;
     }
 
@@ -72,7 +73,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
         },
         onError: (error) {
           if (context.mounted) {
-            showCustomSnackBar(context, "Error in communication");
+            showCustomSnackBar(context, "Error in communication", c.errorColor);
             setState(() {
               isLoading = false;
             });
@@ -80,7 +81,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
         },
         onDone: () {
           if (context.mounted) {
-            showCustomSnackBar(context, "Disconnected from ESP32");
+            showCustomSnackBar(context, "Disconnected from ESP32", c.darkColor);
             setState(() {
               isLoading = false;
             });
@@ -91,7 +92,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
       await espService.sendMessage(jsonString);
     } catch (e) {
       if (context.mounted) {
-        showCustomSnackBar(context, "Failed to send configuration");
+        showCustomSnackBar(
+          context,
+          "Failed to send configuration",
+          c.darkColor,
+        );
       }
       debugPrint("Error sending JSON: $e");
     }

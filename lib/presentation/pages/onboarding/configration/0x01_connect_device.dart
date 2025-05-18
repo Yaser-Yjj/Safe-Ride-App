@@ -59,9 +59,13 @@ class _ESP32ControllerState extends State<ESP32Controller> {
       if (receivedMessage == "Connected with Device") {
         _showLoaderAndNavigate(context);
       } else if (receivedMessage.startsWith("error")) {
-        showCustomSnackBar(context, "Connection error: $receivedMessage");
+        showCustomSnackBar(
+          context,
+          "Connection error: $receivedMessage",
+          c.darkColor,
+        );
       } else if (receivedMessage == "disconnected") {
-        showCustomSnackBar(context, "Disconnected from ESP32");
+        showCustomSnackBar(context, "Disconnected from ESP32", c.darkColor);
       }
     });
   }
