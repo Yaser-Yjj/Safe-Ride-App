@@ -17,7 +17,7 @@ class DoneScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               width: 300,
               height: 300,
               child: Image.asset('assets/images/Configuration_Success.png'),
@@ -55,7 +55,11 @@ class DoneScreen extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             if (!context.mounted) return;
-            Navigator.popAndPushNamed(context, AppRoutes.mainScreen);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoutes.mainScreen,
+              (route) => false,
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: c.darkColor,
