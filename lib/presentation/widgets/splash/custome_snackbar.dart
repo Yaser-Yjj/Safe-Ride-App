@@ -7,7 +7,7 @@ void showCustomSnackBar(BuildContext context, String message, Color color) {
       backgroundColor: color,
       duration: Duration(seconds: 3),
       behavior: SnackBarBehavior.floating,
-      margin: const EdgeInsets.only(bottom: 350, left: 20, right: 20),
+      margin: const EdgeInsets.only(bottom: 280, left: 20, right: 20),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 4,
