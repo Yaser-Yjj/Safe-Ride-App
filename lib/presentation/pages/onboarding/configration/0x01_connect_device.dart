@@ -34,7 +34,7 @@ class _ESP32ControllerState extends State<ESP32Controller> {
       await espService.connect(ip, port);
       if (espService.connected) {
         setState(() {
-          response = "Connected to ESP32!";
+          response = "Connected to Device!";
         });
         _startListening();
       } else {
@@ -65,7 +65,7 @@ class _ESP32ControllerState extends State<ESP32Controller> {
           c.darkColor,
         );
       } else if (receivedMessage == "disconnected") {
-        showCustomSnackBar(context, "Disconnected from ESP32", c.darkColor);
+        showCustomSnackBar(context, "Disconnected from Device", c.darkColor);
       }
     });
   }
@@ -99,7 +99,7 @@ class _ESP32ControllerState extends State<ESP32Controller> {
               style: TextStyle(color: c.darkColor),
             ),
             content: Text(
-              "Have you connected to the ESP32 hotspot?",
+              "Have you connected to the Device hotspot?",
               style: TextStyle(color: c.darkColor),
             ),
             actions: [

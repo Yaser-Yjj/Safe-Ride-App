@@ -132,7 +132,7 @@ class _WifiConfigScreenState extends State<WifiConfigScreen> {
                 decoration: InputDecoration(
                   labelText: "Wi-Fi SSID",
                   labelStyle: TextStyle(color: c.darkColor),
-                  hintText: "e.g. MyHomeNetwork",
+                  hintText: "e.g. SafeRide Device",
                   hintStyle: TextStyle(color: c.darkColor.withOpacity(0.6)),
                   prefixIcon: Icon(Icons.wifi, color: c.darkColor),
                   filled: true,
