@@ -21,6 +21,103 @@ class _SummaryScreenState extends State<SummaryScreen> {
   late final ESP32Service espService;
   StreamSubscription<String>? _subscription;
 
+  Widget _buildInfoCard({
+    required IconData icon,
+    required String title,
+    required String content,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: c.darkColor.withOpacity(0.05),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: c.darkColor, size: 24),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: c.darkColor.withOpacity(0.7),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                content,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: c.darkColor,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactCard(String title, List<String> contacts) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: c.darkColor.withOpacity(0.05),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.phone, color: c.darkColor, size: 24),
+              const SizedBox(width: 12),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: c.darkColor.withOpacity(0.7),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...contacts.map((contact) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 36),
+              child: Text(
+                contact,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: c.darkColor,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -116,43 +213,78 @@ class _SummaryScreenState extends State<SummaryScreen> {
   @override
   Widget build(BuildContext context) {
     final config = ConfigService().config;
+
     return Scaffold(
       appBar: CustomAppBar(),
+      backgroundColor: c.lightColor,
       body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Wi-Fi SSID: ${config.ssid ?? "SafeRide-Device"}"),
-            Text("Full Name: ${config.fullName ?? "Not Set"}"),
-            const SizedBox(height: 16),
-            const Text("Emergency Contacts:"),
-            Text("1. ${config.contact1Name} - ${config.contact1Number}"),
-            Text("2. ${config.contact2Name} - ${config.contact2Number}"),
-            Text("3. ${config.contact3Name} - ${config.contact3Number}"),
-            const Spacer(),
-            ElevatedButton.icon(
-              onPressed: isLoading ? null : () => _sendConfig(context),
-              icon:
-                  isLoading
-                      ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                      : const Icon(Icons.send),
-              label:
-                  isLoading
-                      ? const Text("Sending...")
-                      : const Text("Apply Settings"),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 14,
+        padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Configuration Summary",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: c.darkColor,
                 ),
               ),
+              const SizedBox(height: 10),
+              Text(
+                "Review your settings before applying.",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: c.darkColor.withOpacity(0.7),
+                ),
+              ),
+              const SizedBox(height: 30),
+
+              _buildInfoCard(
+                icon: Icons.wifi,
+                title: "Wi-Fi Network",
+                content: config.ssid ?? "SafeRide-Device",
+              ),
+
+              const SizedBox(height: 20),
+
+              _buildInfoCard(
+                icon: Icons.person,
+                title: "Full Name",
+                content: config.fullName ?? "Not Set",
+              ),
+
+              const SizedBox(height: 20),
+
+              _buildContactCard("Emergency Contacts", [
+                "1. ${config.contact1Name} - ${config.contact1Number}",
+                "2. ${config.contact2Name} - ${config.contact2Number}",
+                "3. ${config.contact3Name} - ${config.contact3Number}",
+              ]),
+
+              const SizedBox(height: 40),
+            ],
+          ),
+        ),
+      ),
+
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.symmetric(vertical: 50),
+        padding: const EdgeInsets.all(16),
+        color: Colors.transparent,
+        child: ElevatedButton(
+          onPressed: () => _sendConfig(context),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: c.darkColor,
+            foregroundColor: c.lightColor,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
             ),
-          ],
+            elevation: 3,
+          ),
+          child: Text("Apply Settings"),
         ),
       ),
     );
