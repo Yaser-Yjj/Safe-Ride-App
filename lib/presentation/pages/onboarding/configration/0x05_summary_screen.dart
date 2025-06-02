@@ -33,7 +33,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: c.darkColor.withOpacity(0.05),
+            color: c.darkColor.withAlpha((0.05 * 255).toInt()),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -50,7 +50,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 title,
                 style: TextStyle(
                   fontSize: 14,
-                  color: c.darkColor.withOpacity(0.7),
+                  color: c.darkColor.withAlpha((0.7 * 255).toInt()),
                 ),
               ),
               const SizedBox(height: 4),
@@ -77,7 +77,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: c.darkColor.withOpacity(0.05),
+            color: c.darkColor.withAlpha((0.05 * 255).toInt()),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -94,7 +94,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 title,
                 style: TextStyle(
                   fontSize: 14,
-                  color: c.darkColor.withOpacity(0.7),
+                  color: c.darkColor.withAlpha((0.7 * 255).toInt()),
                 ),
               ),
             ],
@@ -236,7 +236,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 "Review your settings before applying.",
                 style: TextStyle(
                   fontSize: 14,
-                  color: c.darkColor.withOpacity(0.7),
+                  color: c.darkColor.withAlpha((0.7 * 255).toInt()),
                 ),
               ),
               const SizedBox(height: 30),

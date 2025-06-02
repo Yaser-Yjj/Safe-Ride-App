@@ -8,6 +8,7 @@ import 'package:safe_ride_app/presentation/widgets/home/connection_dialog.dart';
 import 'package:safe_ride_app/presentation/widgets/main/app_bar.dart';
 import 'package:safe_ride_app/presentation/widgets/splash/custome_snackbar.dart';
 import 'package:safe_ride_app/presentation/widgets/splash/loader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ESP32Controller extends StatefulWidget {
   const ESP32Controller({super.key});
@@ -51,13 +52,29 @@ class _ESP32ControllerState extends State<ESP32Controller> {
 
   void _startListening() {
     subscription?.cancel();
-    subscription = espService.messages.listen((receivedMessage) {
+    subscription = espService.messages.listen((receivedMessage) async {
       if (!mounted) return;
       setState(() {
         response = "Received: $receivedMessage";
       });
+
       if (receivedMessage == "Connected with Device") {
-        _showLoaderAndNavigate(context);
+        final prefs = await SharedPreferences.getInstance();
+        final bool hasCompletedSetup = prefs.getBool('setup_complete') ?? false;
+
+        debugPrint(
+          "setup complete: $hasCompletedSetup and message: $receivedMessage",
+        );
+
+        if (!mounted) return;
+        if (hasCompletedSetup) {
+          _showLoaderAndNavigate(context, AppRoutes.mainScreen);
+          debugPrint("go to main screen");
+        } else {
+          _showLoaderAndNavigate(context, AppRoutes.wifiConfig);
+          debugPrint("go to wifi config");
+        }
+
       } else if (receivedMessage.startsWith("error")) {
         showCustomSnackBar(
           context,
@@ -76,14 +93,14 @@ class _ESP32ControllerState extends State<ESP32Controller> {
     super.dispose();
   }
 
-  void _showLoaderAndNavigate(BuildContext context) {
+  void _showLoaderAndNavigate(BuildContext context, String route) {
     if (!context.mounted) return;
     final navigator = Navigator.of(context);
     showLoader(context, "Verifying connection...");
     Future.delayed(Duration(seconds: 3), () {
       if (!context.mounted) return;
       navigator.pop();
-      Navigator.pushReplacementNamed(context, AppRoutes.wifiConfig);
+      Navigator.pushReplacementNamed(context, route);
     });
   }
 

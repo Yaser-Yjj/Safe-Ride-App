@@ -158,7 +158,9 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   labelText: "Full Name",
                   labelStyle: TextStyle(color: c.darkColor),
                   hintText: "e.g. Yasser Yjjou",
-                  hintStyle: TextStyle(color: c.darkColor.withOpacity(0.6)),
+                  hintStyle: TextStyle(
+                    color: c.darkColor.withAlpha((0.6 * 255).toInt()),
+                  ),
                   prefixIcon: Icon(Icons.person, color: c.darkColor),
                   filled: true,
                   fillColor: Colors.white,
@@ -194,7 +196,9 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   labelText: "Phone Number",
                   labelStyle: TextStyle(color: c.darkColor),
                   hintText: "e.g. +212 608399120",
-                  hintStyle: TextStyle(color: c.darkColor.withOpacity(0.6)),
+                  hintStyle: TextStyle(
+                    color: c.darkColor.withAlpha((0.6 * 255).toInt()),
+                  ),
                   prefixIcon: Icon(Icons.phone, color: c.darkColor),
                   filled: true,
                   fillColor: Colors.white,

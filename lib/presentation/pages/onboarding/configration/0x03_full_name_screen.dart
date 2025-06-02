@@ -77,7 +77,7 @@ class _FullNameScreenState extends State<FullNameScreen> {
                 labelText: "Enter your full name",
                 labelStyle: TextStyle(color: c.darkColor),
                 hintText: "e.g. Yasser Yjjou",
-                hintStyle: TextStyle(color: c.darkColor.withOpacity(0.6)),
+                hintStyle: TextStyle(color: c.darkColor.withAlpha((0.6 * 255).toInt())),
                 prefixIcon: Icon(Icons.person, color: c.darkColor),
                 filled: true,
                 fillColor: Colors.white,
