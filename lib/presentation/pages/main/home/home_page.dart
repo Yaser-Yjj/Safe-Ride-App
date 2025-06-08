@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
                     Icon(Icons.wifi, size: 25, color: c.darkColor),
                     SizedBox(width: 8),
                     Text(
-                      'Not Connect',
+                      'Connected',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: c.darkColor,
