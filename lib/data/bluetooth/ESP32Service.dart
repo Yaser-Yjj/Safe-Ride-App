@@ -10,7 +10,6 @@ class ESP32Service {
   Socket? socket;
   bool connected = false;
 
-  // ✅ Use Broadcast Stream to allow multiple listeners
   final StreamController<String> _controller =
       StreamController<String>.broadcast();
   Stream<String> get messages => _controller.stream;
