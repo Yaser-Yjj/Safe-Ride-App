@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:safe_ride_app/core/theme/theme.dart';
-import 'package:safe_ride_app/data/bluetooth/ESP32Service.dart';
+import 'package:safe_ride_app/data/services/ESP32Service.dart';
 import 'package:safe_ride_app/presentation/widgets/home/setting_item.dart';
+// ignore: unused_import
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatelessWidget {

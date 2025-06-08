@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:safe_ride_app/core/theme/theme.dart';
-import 'package:safe_ride_app/data/bluetooth/ESP32Service.dart';
+import 'package:safe_ride_app/data/services/ESP32Service.dart';
 import 'package:safe_ride_app/presentation/routes/app_routes.dart';
 import 'package:safe_ride_app/presentation/widgets/home/connection_dialog.dart';
 import 'package:safe_ride_app/presentation/widgets/main/app_bar.dart';

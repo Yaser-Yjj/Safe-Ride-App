@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safe_ride_app/core/theme/theme.dart';
-import 'package:safe_ride_app/data/bluetooth/config_service.dart';
+import 'package:safe_ride_app/data/services/config_service.dart';
 import 'package:safe_ride_app/presentation/routes/app_routes.dart';
 import 'package:safe_ride_app/presentation/widgets/main/app_bar.dart';
 import 'package:safe_ride_app/presentation/widgets/splash/custome_snackbar.dart';
