@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:safe_ride_app/core/theme/theme.dart';
+import 'package:safe_ride_app/data/services/accident_handler.dart';
+import 'package:safe_ride_app/data/services/navigator_service.dart';
+import 'package:safe_ride_app/presentation/pages/onboarding/configration/0x01_connect_device.dart';
 import 'package:safe_ride_app/presentation/routes/app_router.dart';
 import 'package:safe_ride_app/presentation/routes/app_routes.dart';
 
@@ -23,6 +26,10 @@ class SafeRideApp extends StatelessWidget {
           selectionColor: c.grisColor,
           selectionHandleColor: c.darkColor,
         ),
+      ),
+      home: AccidentHandler( 
+        navigatorKey: navigationService.navigatorKey, 
+        child: const ESP32Controller(),
       ),
     );
   }

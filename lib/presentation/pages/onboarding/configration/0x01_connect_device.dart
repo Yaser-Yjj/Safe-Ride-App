@@ -28,6 +28,11 @@ class _ESP32ControllerState extends State<ESP32Controller> {
   void initState() {
     super.initState();
     espService = ESP32Service();
+    bool initialized = false;
+    if (!initialized) {
+      checkAndOpenAccessibility();
+      initialized = true;
+    }
   }
 
   Future<void> connectToESP32() async {
@@ -74,7 +79,6 @@ class _ESP32ControllerState extends State<ESP32Controller> {
           _showLoaderAndNavigate(context, AppRoutes.wifiConfig);
           debugPrint("go to wifi config");
         }
-
       } else if (receivedMessage.startsWith("error")) {
         showCustomSnackBar(
           context,
