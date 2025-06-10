@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:safe_ride_app/data/services/AccessibilityHelper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ESP32Service {
@@ -13,6 +12,14 @@ class ESP32Service {
 
   Socket? socket;
   bool connected = false;
+
+  bool autoReconnect = true;
+  int reconnectAttempts = 0;
+  final int maxReconnectAttempts = 5;
+  final Duration reconnectDelay = const Duration(seconds: 5);
+
+  final ip = "192.168.4.1";
+  final port = 3333;
 
   final StreamController<String> _messageController =
       StreamController.broadcast();
@@ -38,13 +45,14 @@ class ESP32Service {
 
           if (message == "accident") {
             _accidentController.add(null);
-            await _handleEmergencyCall();
+            await _handleEmergencyCall(ip, port);
           }
         },
         onDone: () {
           connected = false;
           socket = null;
           _messageController.add('disconnected');
+          startAutoReconnect(ip, port);
         },
         onError: (error) {
           connected = false;
@@ -56,7 +64,29 @@ class ESP32Service {
       connected = false;
       socket = null;
       _messageController.add('connection_error: $e');
+      startAutoReconnect(ip, port);
       rethrow;
+    }
+  }
+
+  void startAutoReconnect(String ip, int port) {
+    if (!connected && autoReconnect) {
+      Future.delayed(reconnectDelay, () async {
+        debugPrint("🔄 Attempting to reconnect to ESP32...");
+        try {
+          await connect(ip, port);
+          debugPrint("✅ Reconnected to ESP32");
+          reconnectAttempts = 0;
+        } catch (_) {
+          if (reconnectAttempts < maxReconnectAttempts) {
+            reconnectAttempts++;
+            debugPrint("❌ Reconnect attempt $reconnectAttempts failed");
+            startAutoReconnect(ip, port);
+          } else {
+            debugPrint("🛑 Max reconnect attempts reached");
+          }
+        }
+      });
     }
   }
 
@@ -82,7 +112,7 @@ class ESP32Service {
   }
 }
 
-Future<void> _handleEmergencyCall() async {
+Future<void> _handleEmergencyCall(String ip, int port) async {
   const String emergencyNumber = "0639114924";
   final Uri url = Uri(scheme: 'tel', path: '+212$emergencyNumber');
 
@@ -93,54 +123,41 @@ Future<void> _handleEmergencyCall() async {
     return;
   }
 
+  final espService = ESP32Service(); 
+
   if (Platform.isAndroid) {
     final status = await Permission.phone.status;
 
     if (status.isGranted) {
-      _openDialerWithIntent(emergencyNumber);
+      _directCall(emergencyNumber);
+      espService.startAutoReconnect(ip, port); 
     } else {
       final result = await Permission.phone.request();
 
       if (result.isGranted) {
-        _openDialerWithIntent(emergencyNumber);
-      } else {
-        debugPrint("_showPermissionDeniedDialog()");
+        _directCall(emergencyNumber);
+        espService.startAutoReconnect(ip, port);
       }
     }
   } else if (Platform.isIOS) {
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     }
+    espService.startAutoReconnect(ip, port);
   } else {
     debugPrint("⚠️ Platform not supported for calling");
+    espService.startAutoReconnect(ip, port);
   }
 }
 
-void _openDialerWithIntent(String number) async {
+void _directCall(String number) async {
   try {
     final AndroidIntent intent = AndroidIntent(
-      action: 'android.intent.action.CALL', 
+      action: 'android.intent.action.CALL',
       data: 'tel:$number',
     );
     await intent.launch();
   } catch (e) {
     debugPrint("❌ Failed to open dialer: $e");
   }
-}
-
-void checkAndOpenAccessibility() async {
-  bool isEnabled = await AccessibilityHelper.isAccessibilityServiceEnabled();
-
-  if (!isEnabled) {
-    _openAccessibilitySettings();
-  } else {
-    debugPrint("✅ Accessibility already enabled.");
-  }
-}
-
-void _openAccessibilitySettings() async {
-  final AndroidIntent intent = AndroidIntent(
-    action: 'android.settings.ACCESSIBILITY_SETTINGS',
-  );
-  await intent.launch();
 }
