@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:safe_ride_app/data/services/auth_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ESP32Service {
@@ -15,7 +16,7 @@ class ESP32Service {
 
   bool autoReconnect = true;
   int reconnectAttempts = 0;
-  final int maxReconnectAttempts = 5;
+  final int maxReconnectAttempts = 1;
   final Duration reconnectDelay = const Duration(seconds: 5);
 
   final ip = "192.168.4.1";
@@ -64,7 +65,6 @@ class ESP32Service {
       connected = false;
       socket = null;
       _messageController.add('connection_error: $e');
-      startAutoReconnect(ip, port);
       rethrow;
     }
   }
@@ -83,7 +83,9 @@ class ESP32Service {
             debugPrint("❌ Reconnect attempt $reconnectAttempts failed");
             startAutoReconnect(ip, port);
           } else {
-            debugPrint("🛑 Max reconnect attempts reached");
+            debugPrint("🛑 Max reconnect attempts reached → Signing out");
+            ESP32Service().disconnect();
+            handleSignOut();
           }
         }
       });
@@ -103,6 +105,7 @@ class ESP32Service {
     socket?.destroy();
     socket = null;
     connected = false;
+    reconnectAttempts = 0;
     _messageController.add('disconnected');
   }
 
@@ -123,14 +126,14 @@ Future<void> _handleEmergencyCall(String ip, int port) async {
     return;
   }
 
-  final espService = ESP32Service(); 
+  final espService = ESP32Service();
 
   if (Platform.isAndroid) {
     final status = await Permission.phone.status;
 
     if (status.isGranted) {
       _directCall(emergencyNumber);
-      espService.startAutoReconnect(ip, port); 
+      espService.startAutoReconnect(ip, port);
     } else {
       final result = await Permission.phone.request();
 
