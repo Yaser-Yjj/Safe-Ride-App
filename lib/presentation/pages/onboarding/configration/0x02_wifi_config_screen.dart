@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safe_ride_app/core/theme/theme.dart';
 import 'package:safe_ride_app/data/services/config_service.dart';
 import 'package:safe_ride_app/presentation/routes/app_routes.dart';
+import 'package:safe_ride_app/presentation/widgets/home/custom_header.dart';
 import 'package:safe_ride_app/presentation/widgets/main/app_bar.dart';
 import 'package:safe_ride_app/presentation/widgets/splash/custome_snackbar.dart';
 
@@ -123,6 +124,12 @@ class _WifiConfigScreenState extends State<WifiConfigScreen> {
         child: Form(
           child: Column(
             children: [
+              ReusableHeader(
+                title: "Wi-Fi Configuration",
+                description:
+                    "Change the Wi-Fi name and password of your XALT device so you can use it securely without connection issues.",
+              ),
+
               TextFormField(
                 cursorColor: c.darkColor,
                 cursorErrorColor: c.errorColor,
@@ -133,7 +140,9 @@ class _WifiConfigScreenState extends State<WifiConfigScreen> {
                   labelText: "Wi-Fi SSID",
                   labelStyle: TextStyle(color: c.darkColor),
                   hintText: "e.g. SafeRide Device",
-                  hintStyle: TextStyle(color: c.darkColor.withAlpha((0.6 * 255).toInt())),
+                  hintStyle: TextStyle(
+                    color: c.darkColor.withAlpha((0.6 * 255).toInt()),
+                  ),
                   prefixIcon: Icon(Icons.wifi, color: c.darkColor),
                   filled: true,
                   fillColor: Colors.white,

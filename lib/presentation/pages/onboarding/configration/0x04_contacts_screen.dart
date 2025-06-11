@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safe_ride_app/core/theme/theme.dart';
 import 'package:safe_ride_app/data/services/config_service.dart';
 import 'package:safe_ride_app/presentation/routes/app_routes.dart';
+import 'package:safe_ride_app/presentation/widgets/home/custom_header.dart';
 import 'package:safe_ride_app/presentation/widgets/main/app_bar.dart';
 import 'package:safe_ride_app/presentation/widgets/splash/custome_snackbar.dart';
 
@@ -148,6 +149,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
         child: Form(
           child: Column(
             children: [
+              ReusableHeader(
+                title: "Emergency Contact",
+                description:
+                    "Enter a name and phone number. This contact will be alerted if an accident is detected.",
+              ),
               TextFormField(
                 controller: _nameController,
                 focusNode: _nameFocus,

@@ -11,8 +11,10 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> handleEmergencySMS() async {
   final prefs = await SharedPreferences.getInstance();
-  final contactName = "Hamza";
-  final contact1Number ="0632114924";
+  /* final contactName = "Hamza";
+  final contact1Number ="0632114924"; */
+  final String? contactName = prefs.getString("contact1_name");
+  final String? contact1Number = prefs.getString("contact1_number");
   final fullName = prefs.getString("full_name");
 
   final location = "https://maps.google.com/?q=33.9883702,-6.8574214";
@@ -20,11 +22,11 @@ Future<void> handleEmergencySMS() async {
 
   final String smsMessageArabic = """
 مرحبا $contactName،
-بغي نعَلمك بلي $fullName راح تلاقا ب الحادث.
+بغي نعَلمك بلي $fullName دار حادث.
 مكان ديالك هو هاد الرابط: $location
 وقت الحادث: $time
 
-دعم SafeRide
+ دعم SafeRide
 """;
 
   final Uri smsUri = Uri(
@@ -65,7 +67,7 @@ Future<void> handleEmergencySMS() async {
   }
 }
 
-void _directSms(String number, String message) async {
+void _directSms(String? number, String message) async {
   try {
     final AndroidIntent intent = AndroidIntent(
       action: 'android.intent.action.VIEW',

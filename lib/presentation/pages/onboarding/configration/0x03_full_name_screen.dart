@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safe_ride_app/core/theme/theme.dart';
 import 'package:safe_ride_app/data/services/config_service.dart';
 import 'package:safe_ride_app/presentation/routes/app_routes.dart';
+import 'package:safe_ride_app/presentation/widgets/home/custom_header.dart';
 import 'package:safe_ride_app/presentation/widgets/main/app_bar.dart';
 import 'package:safe_ride_app/presentation/widgets/splash/custome_snackbar.dart';
 
@@ -70,6 +71,11 @@ class _FullNameScreenState extends State<FullNameScreen> {
         padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
         child: Column(
           children: [
+            ReusableHeader(
+              title: "Full Name",
+              description:
+                  "We will use your name to personalize emergency alerts. This helps your contact know who needs help.",
+            ),
             TextField(
               controller: _fullNameController,
               focusNode: _fullNameFocus,
@@ -77,7 +83,9 @@ class _FullNameScreenState extends State<FullNameScreen> {
                 labelText: "Enter your full name",
                 labelStyle: TextStyle(color: c.darkColor),
                 hintText: "e.g. Yasser Yjjou",
-                hintStyle: TextStyle(color: c.darkColor.withAlpha((0.6 * 255).toInt())),
+                hintStyle: TextStyle(
+                  color: c.darkColor.withAlpha((0.6 * 255).toInt()),
+                ),
                 prefixIcon: Icon(Icons.person, color: c.darkColor),
                 filled: true,
                 fillColor: Colors.white,
