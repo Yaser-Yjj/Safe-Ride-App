@@ -8,6 +8,7 @@ import 'package:safe_ride_app/presentation/routes/app_routes.dart';
 import 'package:safe_ride_app/presentation/widgets/main/app_bar.dart';
 import 'package:safe_ride_app/presentation/widgets/splash/custome_snackbar.dart';
 import 'package:safe_ride_app/presentation/widgets/splash/loader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SummaryScreen extends StatefulWidget {
   const SummaryScreen({super.key});
@@ -132,6 +133,21 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   Future<void> _sendConfig(BuildContext context) async {
     final config = ConfigService().config;
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString("wifi_ssid", config.ssid ?? "");
+    await prefs.setString("wifi_password", config.password ?? "");
+    await prefs.setString("full_name", config.fullName ?? "");
+
+    await prefs.setString("contact1_name", config.contact1Name ?? "");
+    await prefs.setString("contact1_number", config.contact1Number ?? "");
+
+    await prefs.setString("contact2_name", config.contact2Name ?? "");
+    await prefs.setString("contact2_number", config.contact2Number ?? "");
+
+    await prefs.setString("contact3_name", config.contact3Name ?? "");
+    await prefs.setString("contact3_number", config.contact3Number ?? "");
+
     final jsonData = {
       "config": "1",
       "ssid": config.ssid,

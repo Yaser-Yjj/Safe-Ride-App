@@ -146,43 +146,52 @@ void _showLogOutDialog(BuildContext context) {
   showDialog(
     context: context,
     barrierDismissible: false,
-    builder:
-        (context) => AlertDialog(
-          backgroundColor: c.lightColor,
-          title: Text("Sign Out", style: TextStyle(color: c.darkColor)),
-          content: Text(
-            "Are you sure you want to sign out?",
-            style: TextStyle(color: c.darkColor),
-          ),
-          actions: [
-            TextButton(
-              onPressed: Navigator.of(context).pop,
-              child: Text("Cancel", style: TextStyle(color: c.darkColor)),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: c.darkColor,
-                foregroundColor: c.lightColor,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-              ),
-              onPressed: () async {
-                /* final prefs = await SharedPreferences.getInstance();
-                await prefs.clear(); */
-                ESP32Service().disconnect();
+    builder: (context) => AlertDialog(
+      backgroundColor: c.lightColor,
+      title: Text("Sign Out", style: TextStyle(color: c.darkColor)),
+      content: Text(
+        "Would you like to just sign out or delete all your data?",
+        style: TextStyle(color: c.darkColor),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () async {
+            Navigator.pop(context); 
 
-                if (!context.mounted) return;
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/',
-                  (route) => false,
-                );
-              },
-              child: const Text("Sign Out"),
-            ),
-          ],
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.clear(); 
+            ESP32Service().disconnect();
+
+            if (!context.mounted) return;
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/',
+              (route) => false,
+            );
+          },
+          child: Text("Clear Data & Sign Out", style: TextStyle(color: c.darkColor)),
         ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: c.darkColor,
+            foregroundColor: c.lightColor,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+          onPressed: () {
+            ESP32Service().disconnect();
+
+            Navigator.pop(context); 
+
+            if (!context.mounted) return;
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/',
+              (route) => false,
+            );
+          },
+          child: const Text("Sign Out Only"),
+        ),
+      ],
+    ),
   );
 }
