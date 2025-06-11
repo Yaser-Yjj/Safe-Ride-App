@@ -5,7 +5,6 @@ import 'package:safe_ride_app/data/services/auth_service.dart';
 import 'package:safe_ride_app/data/services/emergency_call_handler.dart';
 import 'package:safe_ride_app/data/services/emergency_sms_handler.dart';
 
-
 class ESP32Service {
   static final ESP32Service _instance = ESP32Service._internal();
   factory ESP32Service() => _instance;
@@ -26,6 +25,10 @@ class ESP32Service {
       StreamController.broadcast();
   final StreamController<void> _accidentController =
       StreamController<void>.broadcast();
+
+  final StreamController<double> _yawDegController =
+      StreamController.broadcast();
+  Stream<double> get yawDegStream => _yawDegController.stream;
 
   Stream<String> get messages => _messageController.stream;
   Stream<void> get onAccident => _accidentController.stream;
@@ -48,8 +51,14 @@ class ESP32Service {
             _accidentController.add(null);
             await handleEmergencySMS();
             await handleEmergencyCall(ip, port);
+          } else if (isNumericMessage(message)) {
+            double value = double.parse(message);
+            debugPrint("✅ Numeric message received: $value");
+            _yawDegController.add(value);
+          } else {
+            debugPrint("💢 message mn else ya3ni l3adam: $message");
           }
-        }, 
+        },
         onDone: () {
           connected = false;
           socket = null;
@@ -68,6 +77,11 @@ class ESP32Service {
       _messageController.add('connection_error: $e');
       rethrow;
     }
+  }
+
+  bool isNumericMessage(String msg) {
+    if (msg.isEmpty) return false;
+    return double.tryParse(msg) != null;
   }
 
   void startAutoReconnect(String ip, int port) {
@@ -115,4 +129,3 @@ class ESP32Service {
     _accidentController.close();
   }
 }
-

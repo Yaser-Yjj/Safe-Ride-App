@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:safe_ride_app/core/theme/theme.dart';
-import 'package:app_settings/app_settings.dart';
-import 'package:safe_ride_app/presentation/widgets/home/connection_dialog.dart';
+import 'package:safe_ride_app/data/services/ESP32Service.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  Color getIconColor(double yaw) {
+    if (yaw.abs() > 65) {
+      return c.errorColor;
+    } else if (yaw.abs() > 30) {
+      return c.primaryColor;
+    } else {
+      return c.darkColor; 
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final espService = ESP32Service(); 
+
     return Scaffold(
       backgroundColor: c.lightColor,
       body: Padding(
@@ -41,15 +52,17 @@ class HomePage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
+
+            // Bluetooth + Wi-Fi status
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Row(
                   children: [
                     Icon(Icons.bluetooth, size: 25, color: c.darkColor),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
-                      'Not Connect',
+                      'Not Connected',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: c.darkColor,
@@ -60,11 +73,11 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(width: 40),
+                const SizedBox(width: 40),
                 Row(
                   children: [
                     Icon(Icons.wifi, size: 25, color: c.darkColor),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
                       'Connected',
                       textAlign: TextAlign.center,
@@ -79,45 +92,61 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
+
             const SizedBox(height: 30),
             Image.asset('assets/images/device.png', height: 180),
             const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () async {
-                final result = await showConnectionDialog(context);
 
-                if (result == 'wifi') {
-                  AppSettings.openAppSettings(type: AppSettingsType.wifi);
-                } else if (result == 'bluetooth') {
-                  AppSettings.openAppSettings(type: AppSettingsType.bluetooth);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: c.lightColor,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                  vertical: 15,
+            // YawDeg Live Value
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.battery_6_bar, size: 25, color: c.darkColor),
+                    SizedBox(width: 8),
+                    Text(
+                      'Battery %',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: c.darkColor,
+                        fontSize: 12,
+                        fontFamily: 'DM Sans',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                 ),
-                elevation: 0,
-                shadowColor: Colors.transparent,
-                fixedSize: const Size(300, 50),
-                backgroundColor: c.darkColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
+                const SizedBox(width: 40),
+                StreamBuilder<double>(
+                  stream: espService.yawDegStream,
+                  initialData: 0.0,
+                  builder: (context, snapshot) {
+                    double yaw = snapshot.data ?? 0.0;
+
+                    return Row(
+                      children: [
+                        Icon(
+                          Icons.compass_calibration,
+                          size: 25,
+                          color: getIconColor(yaw),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          "YawDeg: ${yaw.toStringAsFixed(2)}°",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: getIconColor(yaw),
+                            fontSize: 12,
+                            fontFamily: 'DM Sans',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
-              ),
-              child: const Center(
-                child: Text(
-                  'Connect to Device',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: c.lightColor,
-                    fontSize: 16,
-                    fontFamily: 'DM Sans',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
+              ],
             ),
           ],
         ),
